@@ -26,6 +26,17 @@ function bubbleSort(arr) {
     }
 }
 
+function recursiveBubbleSort(arr, n = arr.length){
+    if(n === 1)  return arr;
+    
+    for (let j = 0; j < n - 1; j++) {
+        if (arr[j] > arr[j + 1]) { // check adjacent values
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]; // swap it
+        }
+    }
+    return recursiveBubbleSort(arr, n - 1);
+}
+
 function insertionSort(arr) {
     let t = 0;
     // takes an element and place it in it's correct position
@@ -41,12 +52,32 @@ function insertionSort(arr) {
     
 }
 
+function recursiveInsertionSort(arr){
+    for (let i = 0; i < arr.length; i++) {
+
+        if(arr[i] > arr[i+1]){
+            let j = i+1;
+            while(j > 0 && arr[j] < arr[j-1]){
+                [arr[j], arr[j-1]] = [arr[j-1],arr[j]];
+                j--;
+            }
+        }
+    }
+    return arr
+}
+
 // Create a large random array
-const arr = Array.from({ length: 10000 }, () => Math.floor(Math.random() * 10000));
+const arr = [13,2,9,6,3,4,8];
+// const arr = Array.from({ length: 10000 }, () => Math.floor(Math.random() * 10000));
 const arr1 = [...arr];
 const arr2 = [...arr];
 const arr3 = [...arr];
 
+// console.log(recursiveBubbleSort([...arr1]));
+console.log(recursiveInsertionSort([...arr1]));
+// console.log(arr1);
+
+return
 console.log(selectionSort([...arr3])); // warm up
 console.log(bubbleSort([...arr2])); // warm up
 console.log(insertionSort([...arr1])); // warm up
