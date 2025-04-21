@@ -1,2 +1,45 @@
-<script src="index.js"></script>
-<p>hrlp</p>
+<!-- <script src="index.js"></script> -->
+<!-- <p>hrlp</p> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Performance Test</title>
+</head>
+<body>
+  <h2>Bubble Sort Performance Test</h2>
+  <button onclick="runTest()">Run Bubble Sort</button>
+
+  <script>
+    function bubbleSort(arr) {
+      for (let i = 1; i < arr.length; i++) {
+        for (let j = 0; j < arr.length - i; j++) {
+          if (arr[j] > arr[j + 1]) {
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+          }
+        }
+      }
+      return arr;
+    }
+
+    function runTest() {
+      const arr = Array.from({ length: 1000 }, () => Math.floor(Math.random() * 1000));
+
+      // Use performance.now() to measure time
+      const t0 = performance.now();
+
+      // Optional performance markers
+      performance.mark("sort-start");
+
+      bubbleSort([...arr]);
+
+      performance.mark("sort-end");
+      performance.measure("Bubble Sort Time", "sort-start", "sort-end");
+
+      const t1 = performance.now();
+      console.log(`Bubble Sort took ${(t1 - t0).toFixed(2)} ms`);
+    }
+  </script>
+</body>
+</html>
