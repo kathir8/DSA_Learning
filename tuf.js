@@ -64,15 +64,45 @@ function recursiveInsertionSort(arr, i = 0) {
     return recursiveInsertionSort(arr, ++i);
 }
 
+function quickSort(arr) {
+ /* pick a pivot and place in it's correct place
+       small on the left, larger on the right 
+    */
+    if (arr.length <= 1) return arr;
+
+    const pivot = arr.at(-1);
+    const left = [];
+    const right = [];
+    for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i] < pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+    }
+    return [...quickSort(left), pivot, ...quickSort(right)];
+
+}
+
+function mergeSort(arr) {
+    /* Split the array in half until each part has 1 item
+        Then merge them back together in sorted order. 
+       */
+       if (arr.length <= 1) return arr;
+       const middle = Math.floor(arr.length/2);
+        const left = arr.slice(0, middle);
+        const right = arr.slice(middle);
+   }
+
 // Create a large random array
-const arr = [13, 2, 9, 6, 3, 4, 8];
+const arr = [4, 6, 2, 5, 7, 9, 1, 3];
 // const arr = Array.from({ length: 10000 }, () => Math.floor(Math.random() * 10000));
 const arr1 = [...arr];
 const arr2 = [...arr];
 const arr3 = [...arr];
 
 // console.log(recursiveBubbleSort([...arr1]));
-console.log(recursiveInsertionSort([...arr1]));
+console.log(mergeSort([...arr1]));
 // console.log(arr1);
 
 return
