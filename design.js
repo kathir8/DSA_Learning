@@ -170,7 +170,52 @@ const linkedList = new LinkedList();
 linkedList.addAtTail(1);
 linkedList.addAtTail(2);
 linkedList.addAtTail(3);
-linkedList.addAtTail(4);
-linkedList.addAtTail(5);
-linkedList.createCycle(2);
-console.log(linkedList.hasCycle());
+linkedList.addAtTail(3);
+linkedList.addAtTail(2);
+linkedList.addAtTail(2);
+
+
+
+let slow = linkedList.head;
+let fast = linkedList.head;
+while(fast && fast.next){
+    slow = slow.next;
+    fast = fast.next.next;
+}
+
+let prev = null;
+let current = slow;
+while(current){
+    let nextNode = current.next;
+    current.next = prev;
+    prev = current;
+    current = nextNode;
+}
+
+slow = prev;
+
+console.log(slow);
+console.log(linkedList.head);
+console.log("-----");
+let secondHalf = slow;
+let firstHalf = linkedList.head;
+while (secondHalf) {
+    if(firstHalf.val !== secondHalf.val) {
+        console.log(false);
+        return false;
+    }
+    firstHalf = firstHalf.next;
+    secondHalf = secondHalf.next;
+}
+console.log(true);
+
+return true;
+
+
+
+/*
+3 -> 2 -> 1
+1 -> 2 -> 3
+3 <- 2 <- 1
+*/
+
