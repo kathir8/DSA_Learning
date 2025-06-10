@@ -8,7 +8,7 @@ function LinkedList() {
         this.next = null; // Pointer to the next node
     }
 
-    // Get value at a given index
+    // Get value at a given index - O(n), O(1)
     this.get = (index) => {
         if (index < 0 || index >= this.size) { // If index is invalid
             return -1;
@@ -20,7 +20,7 @@ function LinkedList() {
         return currentNode.val;
     };
 
-    // Add a node at the beginning (head) of the linked list
+    // Add a node at the beginning (head) of the linked list - O(1), O(1)
     this.addAtHead = (val) => {
         const newNode = new Node(val); // Create new node
         newNode.next = this.head; // Point it to current head
@@ -28,7 +28,7 @@ function LinkedList() {
         this.size++; // Increase list size
     }
 
-    // Add a node at the end (tail) of the linked list
+    // Add a node at the end (tail) of the linked list - O(n), O(1)
     this.addAtTail = (val) => {
         const newNode = new Node(val); // Create new node
         if (!this.head) { // If list is empty, new node becomes head
@@ -43,7 +43,7 @@ function LinkedList() {
         this.size++; // Increase list size
     };
 
-    // Add a node at a specific index
+    // Add a node at a specific index - O(n), O(1)
     this.addAtIndex = () => {
         if (index < 0 || index > this.size) return; // If index is invalid
 
@@ -70,7 +70,7 @@ function LinkedList() {
         this.size++; // Increase list size
     }
 
-    // Delete node at a specific index
+    // Delete node at a specific index - O(n), O(1)
     this.deleteAtIndex = (index) => {
         if (index < 0 || index >= this.size) return; // If index is invalid
         if (index === 0) { // Remove head
@@ -85,7 +85,7 @@ function LinkedList() {
         this.size--; // Decrease list size
     }
 
-    // Converts the linked list into an array of values
+    // Converts the linked list into an array of values - O(n), O(n)
     this.convertToArray = () => {
         let current = this.head; // Start from the head node
         const output = [];
@@ -96,20 +96,23 @@ function LinkedList() {
         return output;
     }
 
-    // Reverses the linked list in-place
-    this.ReverseLinkedList = () => {
+    // Reverses the linked list in-place - O(n), O(1)
+    this.ReverseLinkedList = (node) => {
         let prev = null;  // Initially, the previous node is null (will become the new tail)
-        let current = this.head;  // Start from the head of the list
+        let current = node ?? this.head;  // Start from the given node / head of the list
         while (current) {
             const nextNode = current.next; // Store reference to the next node
             current.next = prev; // Reverse the pointer (make current point to previous)
             prev = current;
             current = nextNode;
         }
+        if (node) {
+            return prev;
+        }
         this.head = prev; // Update head to the new first node (previous tail)
     }
 
-    // Creates a cycle in the linked list by connecting the last node to the node at the given index
+    // Creates a cycle in the linked list by connecting the last node to the node at the given index - O(n), O(1)
     this.createCycle = (index) => {
         if (index < 0 || index >= this.size) return;
 
@@ -128,7 +131,7 @@ function LinkedList() {
     // Detects if the linked list has a cycle using a Set to track visited nodes
     this.hasCycle = (bruteForce) => {
 
-        if (bruteForce) {
+        if (bruteForce) { // O(n), O(n)
             let current = this.head;
             const visitedNodes = new Set(); // To store seen node references
             while (current) {
@@ -140,8 +143,8 @@ function LinkedList() {
             }
             return false; // No cycle found
         }
-        
-        // Floyd's Tortoise and Hare algorithm (slow & fast pointer approach)
+
+        // Floyd's Tortoise and Hare algorithm (slow & fast pointer approach) - O(n), O(1)
         let slow = this.head; // Moves one step at a time
         let fast = this.head; // Moves two steps at a time
 
@@ -149,20 +152,53 @@ function LinkedList() {
             slow = slow.next;          // Move slow pointer one step
             fast = fast.next.next;     // Move fast pointer two steps
 
-            if (slow === fast) {
-                // If they meet, there's a cycle
-                return true;
-            }
+            if (slow === fast) return true; // If they meet, there's a cycle
         }
 
         // Fast reached the end → no cycle
         return false;
-
-
-        if (false) {
-
-        }
     }
+
+    // Returns the middle node of the linked list
+    this.midNode = () => {
+        let slow = this.head; // Moves one step at a time
+        let fast = this.head; // Moves two steps at a time
+
+        // When fast reaches the end, slow will be at the midpoint
+        while (fast && fast.next) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow; // Slow is now pointing to the middle node
+    }
+
+    // Checks if the linked list is a palindrome - O(n), O(1)
+    this.isPalindrome = () => {
+        const midNode = this.midNode(); // Step 1: Find the middle node
+
+        // Step 2: Reverse the second half starting from the middle
+        let secondHalfStart = this.ReverseLinkedList(midNode);
+
+        let firstHalf = this.head;
+        let secondHalf = secondHalfStart;
+        let isPalin = true;
+
+        // Step 3: Compare the first half and reversed second half node by node
+        while (secondHalf) {
+            if (firstHalf.val !== secondHalf.val) {
+                isPalin = false; // Mismatch found → not a palindrome
+                break;
+            }
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
+        }
+
+        // Step 4: Restore the second half to original
+        this.ReverseLinkedList(secondHalfStart);
+
+        return isPalin; // All matched → list is a palindrome
+    }
+
 }
 
 // Example usage:
@@ -172,50 +208,7 @@ linkedList.addAtTail(2);
 linkedList.addAtTail(3);
 linkedList.addAtTail(3);
 linkedList.addAtTail(2);
-linkedList.addAtTail(2);
-
-
-
-let slow = linkedList.head;
-let fast = linkedList.head;
-while(fast && fast.next){
-    slow = slow.next;
-    fast = fast.next.next;
-}
-
-let prev = null;
-let current = slow;
-while(current){
-    let nextNode = current.next;
-    current.next = prev;
-    prev = current;
-    current = nextNode;
-}
-
-slow = prev;
-
-console.log(slow);
-console.log(linkedList.head);
-console.log("-----");
-let secondHalf = slow;
-let firstHalf = linkedList.head;
-while (secondHalf) {
-    if(firstHalf.val !== secondHalf.val) {
-        console.log(false);
-        return false;
-    }
-    firstHalf = firstHalf.next;
-    secondHalf = secondHalf.next;
-}
-console.log(true);
-
-return true;
-
-
-
-/*
-3 -> 2 -> 1
-1 -> 2 -> 3
-3 <- 2 <- 1
-*/
-
+linkedList.addAtTail(5);
+console.log(linkedList.convertToArray())
+console.log(linkedList.isPalindrome())
+console.log(linkedList.convertToArray())
