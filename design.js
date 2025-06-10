@@ -1,4 +1,4 @@
-function MyLinkedList() {
+function LinkedList() {
     this.head = null; // Head pointer to the first node of the linked list
     this.size = 0; // Tracks the size (number of nodes) of the linked list
 
@@ -84,35 +84,68 @@ function MyLinkedList() {
         }
         this.size--; // Decrease list size
     }
+
+    // Converts the linked list into an array of values
+    this.convertToArray = () => {
+        let current = this.head; // Start from the head node
+        const output = [];
+        while (current) { // Traverse until the end of the list
+            output.push(current.val);
+            current = current.next;
+        }
+        return output;
+    }
+
+    // Reverses the linked list in-place
+    this.ReverseLinkedList = () => {
+        let prev = null;  // Initially, the previous node is null (will become the new tail)
+        let current = this.head;  // Start from the head of the list
+        while (current) {
+            const nextNode = current.next; // Store reference to the next node
+            current.next = prev; // Reverse the pointer (make current point to previous)
+            prev = current;
+            current = nextNode;
+        }
+        this.head = prev; // Update head to the new first node (previous tail)
+    }
+
+    // Creates a cycle in the linked list by connecting the last node to the node at the given index
+    this.createCycle = (index) => {
+        if (index < 0 || index >= this.size) return;
+
+        let target = this.head;
+        for (let i = 0; i < index; i++) {
+            target = target.next; // Node to form cycle with
+        }
+
+        let tail = this.head;
+        while (tail.next) {
+            tail = tail.next; // Go to last node
+        }
+        tail.next = target; // Create the cycle
+    }
+
+    // Detects if the linked list has a cycle using a Set to track visited nodes
+    this.hasCycle = () => {
+        let current = this.head;
+        const visitedNodes = new Set(); // To store seen node references
+        while (current) {
+            if (visitedNodes.has(current)) {
+                return true;  // cycle exists
+            }
+            visitedNodes.add(current); // Mark this node as visited
+            current = current.next; // Move to the next node
+        }
+        return false; // No cycle found
+    }
 }
 
 // Example usage:
-const linkedList = new MyLinkedList();
-
-// Adding elements to the list
+const linkedList = new LinkedList();
 linkedList.addAtTail(1);
 linkedList.addAtTail(2);
 linkedList.addAtTail(3);
 linkedList.addAtTail(4);
 linkedList.addAtTail(5);
-
-// Print head node and size
-console.log(linkedList.head);
-console.log(linkedList.size);
-
-let prev = this.head;
-let oneTime = true;
-while(prev.next){
-    let current = prev.next;
-    let nextNode = current.next;
-    current.next = prev;
-    nextNode.next = current;
-    if(oneTime){
-        // prev.next = null;
-        oneTime = false;
-    }
-   prev++;
-}
-console.log(linkedList.head);
-
-
+linkedList.createCycle(2);
+console.log(linkedList.hasCycle());
