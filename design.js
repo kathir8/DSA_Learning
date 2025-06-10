@@ -126,17 +126,42 @@ function LinkedList() {
     }
 
     // Detects if the linked list has a cycle using a Set to track visited nodes
-    this.hasCycle = () => {
-        let current = this.head;
-        const visitedNodes = new Set(); // To store seen node references
-        while (current) {
-            if (visitedNodes.has(current)) {
-                return true;  // cycle exists
+    this.hasCycle = (bruteForce) => {
+
+        if (bruteForce) {
+            let current = this.head;
+            const visitedNodes = new Set(); // To store seen node references
+            while (current) {
+                if (visitedNodes.has(current)) {
+                    return true;  // cycle exists
+                }
+                visitedNodes.add(current); // Mark this node as visited
+                current = current.next; // Move to the next node
             }
-            visitedNodes.add(current); // Mark this node as visited
-            current = current.next; // Move to the next node
+            return false; // No cycle found
         }
-        return false; // No cycle found
+        
+        // Floyd's Tortoise and Hare algorithm (slow & fast pointer approach)
+        let slow = this.head; // Moves one step at a time
+        let fast = this.head; // Moves two steps at a time
+
+        while (fast?.next) {
+            slow = slow.next;          // Move slow pointer one step
+            fast = fast.next.next;     // Move fast pointer two steps
+
+            if (slow === fast) {
+                // If they meet, there's a cycle
+                return true;
+            }
+        }
+
+        // Fast reached the end → no cycle
+        return false;
+
+
+        if (false) {
+
+        }
     }
 }
 
