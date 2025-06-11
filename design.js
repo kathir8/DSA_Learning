@@ -85,6 +85,25 @@ function LinkedList() {
         this.size--; // Decrease list size
     }
 
+    // Delete all nodes with a given value from the linked list - O(n), O(1)
+    this.deleteByValue = (target) => {
+        // Create a dummy node (sentinel) that points to the head of the list.
+        let setinel = new Node();
+        setinel.next = this.head;
+
+        let prev = setinel; // Start with the dummy node as the previous node
+
+        // Traverse the entire list
+        while (prev && prev.next) {
+            if (prev.next.val === target) {
+                prev.next = prev.next.next; // If the value of the next node matches the target, skip it
+            } else {
+                prev = prev.next; // Otherwise, move forward
+            }
+        }
+        this.head = setinel.next;  // After deletion, update the head in case the first node(s) were deleted
+    }
+
     // Converts the linked list into an array of values - O(n), O(n)
     this.convertToArray = () => {
         let current = this.head; // Start from the head node
@@ -148,7 +167,7 @@ function LinkedList() {
         let slow = this.head; // Moves one step at a time
         let fast = this.head; // Moves two steps at a time
 
-        while (fast?.next) {
+        while (fast && fast.next) {
             slow = slow.next;          // Move slow pointer one step
             fast = fast.next.next;     // Move fast pointer two steps
 
@@ -203,12 +222,32 @@ function LinkedList() {
 
 // Example usage:
 const linkedList = new LinkedList();
-linkedList.addAtTail(1);
-linkedList.addAtTail(2);
-linkedList.addAtTail(3);
-linkedList.addAtTail(3);
-linkedList.addAtTail(2);
-linkedList.addAtTail(5);
-console.log(linkedList.convertToArray())
-console.log(linkedList.isPalindrome())
-console.log(linkedList.convertToArray())
+// linkedList.addAtTail(1);
+// linkedList.addAtTail(2);
+// linkedList.addAtTail(6);
+// linkedList.addAtTail(3);
+// linkedList.addAtTail(4);
+// linkedList.addAtTail(5);
+// linkedList.addAtTail(6);
+// linkedList.deleteByValue(6);
+
+// linkedList.addAtTail(7);
+// linkedList.addAtTail(7);
+// linkedList.addAtTail(7);
+// linkedList.addAtTail(7);
+linkedList.deleteByValue(7);
+
+// let prev = null;
+// let current = linkedList.head;
+// const val = 6;
+// while (current) {
+//     if (current.val === val) {
+//         prev.next = current.next;
+//         current = prev.next;
+//     } else {
+//         prev = current;
+//         current = current.next;
+//     }
+// }
+
+console.log(linkedList.convertToArray());
