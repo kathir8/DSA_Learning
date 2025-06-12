@@ -143,8 +143,8 @@ function LinkedList() {
     }
 
     // Converts the linked list into an array of values - O(n), O(n)
-    this.convertToArray = () => {
-        let current = this.head; // Start from the head node
+    this.convertToArray = (head) => {
+        let current = head ?? this.head; // Start from the head node
         const output = [];
         while (current) { // Traverse until the end of the list
             output.push(current.val);
@@ -275,41 +275,31 @@ function LinkedList() {
 
 // Example usage:
 const linkedList = new LinkedList();
-// linkedList.addAtTail(0);
-// linkedList.addAtTail(0);
-// linkedList.addAtTail(0);
-// linkedList.addAtTail(0);
-// linkedList.addAtTail(0);
-linkedList.addAtTail(1);
-linkedList.addAtTail(1);
 linkedList.addAtTail(2);
+linkedList.addAtTail(1);
+linkedList.addAtTail(3);
+linkedList.addAtTail(5);
+linkedList.addAtTail(6);
+linkedList.addAtTail(4);
+linkedList.addAtTail(7);
 
-// linkedList.addAtTail(3);
-// linkedList.addAtTail(3);
-linkedList.removeDuplicateFromSorted();
-// linkedList.addAtTail(3);
-// linkedList.addAtTail(4);
-// linkedList.addAtTail(5);
-// linkedList.removeNthFromEnd(2);
+let slow = linkedList.head;
+let fast = linkedList.head.next;
+let odd = slow;
+let even = fast;
 
-// linkedList.addAtTail(7);
-// linkedList.addAtTail(7);
-// linkedList.addAtTail(7);
-// linkedList.addAtTail(7);
-// linkedList.deleteByValue(2);
+while (slow?.next) {
+    slow.next = slow.next.next;
+    slow = slow.next;
+    if (fast.next) {
+        fast.next = fast.next.next;
+    }
+    fast = fast.next;
+}
+let current = odd;
+while (current.next) {
+    current = current.next;
+}
+current.next = even;
 
-// let prev = null;
-// let current = linkedList.head;
-// const val = 6;
-// while (current) {
-//     if (current.val === val) {
-//         prev.next = current.next;
-//         current = prev.next;
-//     } else {
-//         prev = current;
-//         current = current.next;
-//     }
-// }
-
-// console.log(linkedList.findSize());
-console.log(linkedList.convertToArray());
+console.log(linkedList.convertToArray(odd));
