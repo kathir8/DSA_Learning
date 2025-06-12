@@ -73,22 +73,20 @@ function LinkedList() {
     // Delete node at a specific index - O(n), O(1)
     this.deleteAtIndex = (index) => {
         if (index < 0 || index >= this.size) return; // If index is invalid
-        if (index === 0) { // Remove head
-            this.head = this.head.next;
-        } else {
-            let currentNode = this.head;
-            for (let i = 0; i < index - 1; i++) { // Traverse to the node just before the index
-                currentNode = currentNode.next;
-            }
-            currentNode.next = currentNode.next.next; // Skip the node at the index
+        let sentinel = new Node(); // Dummy node to handle edge cases (like deleting the head)
+        sentinel.next = this.head;
+        let prev = sentinel;
+        for (let i = 0; i < index; i++) { // Traverse to the node just before the index
+            prev = prev.next;
         }
+        prev.next = prev.next.next; // Skip the node at the index
+        this.head = sentinel.next; // Assign the node to head
         this.size--; // Decrease list size
     }
 
     // Delete all nodes with a given value from the linked list - O(n), O(1)
     this.deleteByValue = (target) => {
-        // Create a dummy node (sentinel) that points to the head of the list.
-        let setinel = new Node();
+        let setinel = new Node(); // Dummy node to handle edge cases (like deleting the head)
         setinel.next = this.head;
 
         let prev = setinel; // Start with the dummy node as the previous node
@@ -104,6 +102,42 @@ function LinkedList() {
         this.head = setinel.next;  // After deletion, update the head in case the first node(s) were deleted
     }
 
+    // Removes the N-th node from the end of the linked list - O(n), O(1)
+    this.removeNthFromEnd = (target, bruteForce) => {
+        if (bruteForce) {
+            const length = this.findSize(); // Step 1: Get the size of the linked list - O(n)
+            this.deleteAtIndex(length - target); // Step 2: Remove the (length - target)-th node from the beginning - O(n)
+        } else { // O(n), O(1)
+            let sentinel = new Node(); // Dummy node to handle edge cases (like deleting the head)
+            sentinel.next = this.head;
+
+            let slow = sentinel; // Will eventually point to the node before the one to delete
+            let fast = sentinel; // Will move 'target' steps ahead
+            let i = 0;
+
+            // Move the fast pointer to the end of the list
+            while (fast) {
+                if (i > target) { // Start moving slow only after fast is 'target + 1' steps ahead to maintain 'target' number of node gap between slow and fast pointer
+                    slow = slow.next;
+                }
+                fast = fast.next;
+                i++;
+            }
+            slow.next = slow.next.next; // Remove the target-th node from the end
+            this.head = sentinel.next; // Assign the node to head
+            this.size--; // Decrease list size
+        }
+    }
+
+    this.findSize = () => {
+        let current = this.head;
+        let length = 0;
+        while (current) {
+            current = current.next;
+            length++;
+        }
+        return length;
+    }
     // Converts the linked list into an array of values - O(n), O(n)
     this.convertToArray = () => {
         let current = this.head; // Start from the head node
@@ -222,20 +256,18 @@ function LinkedList() {
 
 // Example usage:
 const linkedList = new LinkedList();
-// linkedList.addAtTail(1);
-// linkedList.addAtTail(2);
-// linkedList.addAtTail(6);
-// linkedList.addAtTail(3);
-// linkedList.addAtTail(4);
-// linkedList.addAtTail(5);
-// linkedList.addAtTail(6);
-// linkedList.deleteByValue(6);
+linkedList.addAtTail(1);
+linkedList.addAtTail(2);
+linkedList.addAtTail(3);
+linkedList.addAtTail(4);
+linkedList.addAtTail(5);
+linkedList.removeNthFromEnd(2);
 
 // linkedList.addAtTail(7);
 // linkedList.addAtTail(7);
 // linkedList.addAtTail(7);
 // linkedList.addAtTail(7);
-linkedList.deleteByValue(7);
+// linkedList.deleteByValue(2);
 
 // let prev = null;
 // let current = linkedList.head;
@@ -250,4 +282,5 @@ linkedList.deleteByValue(7);
 //     }
 // }
 
+// console.log(linkedList.findSize());
 console.log(linkedList.convertToArray());
