@@ -107,7 +107,7 @@ function LinkedList() {
         if (bruteForce) {
             const length = this.findSize(); // Step 1: Get the size of the linked list - O(n)
             this.deleteAtIndex(length - target); // Step 2: Remove the (length - target)-th node from the beginning - O(n)
-        } else { // O(n), O(1)
+        } else {
             let sentinel = new Node(); // Dummy node to handle edge cases (like deleting the head)
             sentinel.next = this.head;
 
@@ -129,15 +129,19 @@ function LinkedList() {
         }
     }
 
+    // Calculates and returns the number of nodes in the linked list - O(n), O(1)
     this.findSize = () => {
-        let current = this.head;
-        let length = 0;
+        let current = this.head;  // Start from the head of the list
+        let length = 0; // Counter to track the number of nodes
+
+        // Traverse the entire list
         while (current) {
-            current = current.next;
-            length++;
+            current = current.next; // Move to the next node
+            length++; // Increment counter
         }
-        return length;
+        return length; // Return the total number of nodes
     }
+
     // Converts the linked list into an array of values - O(n), O(n)
     this.convertToArray = () => {
         let current = this.head; // Start from the head node
@@ -252,16 +256,41 @@ function LinkedList() {
         return isPalin; // All matched → list is a palindrome
     }
 
+    // Removes duplicate values from a sorted linked list - O(n), O(1)
+    this.removeDuplicateFromSorted = () => {
+        let current = this.head; // Start from head
+
+        // Traverse the list
+        while (current && current.next) {
+            // If current and next node have the same value, skip the next node
+            if (current.val === current.next.val) {
+                current.next = current.next.next;
+            } else {
+                current = current.next; // Otherwise, move to next node
+            }
+        }
+    }
+
 }
 
 // Example usage:
 const linkedList = new LinkedList();
+// linkedList.addAtTail(0);
+// linkedList.addAtTail(0);
+// linkedList.addAtTail(0);
+// linkedList.addAtTail(0);
+// linkedList.addAtTail(0);
+linkedList.addAtTail(1);
 linkedList.addAtTail(1);
 linkedList.addAtTail(2);
-linkedList.addAtTail(3);
-linkedList.addAtTail(4);
-linkedList.addAtTail(5);
-linkedList.removeNthFromEnd(2);
+
+// linkedList.addAtTail(3);
+// linkedList.addAtTail(3);
+linkedList.removeDuplicateFromSorted();
+// linkedList.addAtTail(3);
+// linkedList.addAtTail(4);
+// linkedList.addAtTail(5);
+// linkedList.removeNthFromEnd(2);
 
 // linkedList.addAtTail(7);
 // linkedList.addAtTail(7);
