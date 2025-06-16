@@ -8,6 +8,9 @@ function LinkedList() {
         this.next = null; // Pointer to the next node
     }
 
+    // Expose Node function to outside
+    LinkedList.Node = Node;
+
     // Get value at a given index - O(n), O(1)
     this.get = (index) => {
         if (index < 0 || index >= this.size) { // If index is invalid
@@ -274,32 +277,62 @@ function LinkedList() {
 }
 
 // Example usage:
-const linkedList = new LinkedList();
-linkedList.addAtTail(2);
-linkedList.addAtTail(1);
-linkedList.addAtTail(3);
-linkedList.addAtTail(5);
-linkedList.addAtTail(6);
-linkedList.addAtTail(4);
-linkedList.addAtTail(7);
+const testCases = [
+    [[1, 2, 3, 4, 5, 6]],
+    [[1, 2, 3, 4]],
+    [[]],
+    [[1]],
+    [[1, 2, 3]],
+];
+const index = 0;
+/*
+ 2,1,3,4,5,6
+*/
+testCases.forEach((x, i) => {
+    if (index < 0 || i === index) {
+        let l1 = x[0];
+        if (Array.isArray(x[0])) {
+            l1 = new LinkedList();
+            x[0].forEach(y => l1.addAtTail(y));
+        }
+        let l2 = x[1];
+        if (Array.isArray(x[1])) {
+            l2 = new LinkedList();
+            x[1].forEach(y => l1.addAtTail(y));
+        }
+        console.log("-----------------");
+        console.log(l1.convertToArray(codeMethod(l1, l2)));
 
-let slow = linkedList.head;
-let fast = linkedList.head.next;
-let odd = slow;
-let even = fast;
-
-while (slow?.next) {
-    slow.next = slow.next.next;
-    slow = slow.next;
-    if (fast.next) {
-        fast.next = fast.next.next;
     }
-    fast = fast.next;
-}
-let current = odd;
-while (current.next) {
-    current = current.next;
-}
-current.next = even;
+});
 
-console.log(linkedList.convertToArray(odd));
+function codeMethod(l1) {
+
+    return swap(l1.head);
+
+    function swap(head) {
+        if (!head || !head.next) return head;
+        let left = head;
+        let right = left.next;
+        left.next = swap(right.next);
+        right.next = left;
+        return right;
+    }
+
+
+    // const sentinelNode = new LinkedList.Node();
+    // sentinelNode.next = l1.head;
+    // let prev = sentinelNode;
+    // while (prev?.next?.next) {
+    //     let first = prev.next;
+    //     let second = first.next;
+
+    //     first.next = second.next;
+    //     second.next = first;
+
+    //     prev.next = second;
+    //     prev = first;
+    // }
+    // return sentinelNode.next;
+
+}
