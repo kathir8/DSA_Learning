@@ -36,10 +36,110 @@ class LinkedList {
         this.size++;
     }
 
+    addAtIndex(index, val) {
+        if (index < 0 || index > this.size) {
+            throw new Error("Index not valid");
+        } else if (index === 0) {
+            this.prepend(val);
+        } else if (index === this.size) {
+            this.append(val);
+        } else {
+            let current = this.head;
+            let nodeInd = 0;
+            while (current) {
+                if (nodeInd === index - 1) {
+                    const newNode = new Node(val, current.next);
+                    current.next = newNode;
+                    this.size++;
+                    break;
+                }
+                current = current.next;
+                nodeInd++;
+            }
+        }
+    }
+
+    deleteAtIndex(index) {
+        if (index < 0 || index >= this.size) {
+            throw new Error("Index is not valid");
+        } else {
+            const sentinelNode = new Node(null, this.head);
+            let current = sentinelNode;
+            let nodeInd = 0;
+            while (current) {
+                if (nodeInd === index) {
+                    current.next = current.next.next;
+                    this.size--;
+                    break;
+                }
+                current = current.next;
+                nodeInd++;
+            }
+            this.head = sentinelNode.next;
+        }
+    }
+
+    get(index) {
+        if (index < 0 || index >= this.size) {
+            return -1;
+        } else if (index === 0) {
+            return this.head.val;
+        } else {
+            let current = this.head;
+            let nodeInd = 0;
+            while (current) {
+                if (nodeInd === index) {
+                    return current.val;
+                }
+                current = current.next;
+                nodeInd++;
+            }
+        }
+    }
+
+    reverse() {
+        let current = this.head;
+        let prev = null;
+        while (current) {
+            let next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        this.head = prev;
+    }
+
+    middleNode() {
+        let slow = this.head;
+        let fast = this.head;
+        while (fast && fast.next) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+    convertToArray() {
+        let current = this.head;
+        const output = [];
+        while (current) {
+            output.push(current.val);
+            current = current.next;
+        }
+        return output;
+    }
 }
 
 
 const list = new LinkedList();
 list.append(2);
 list.prepend(1);
-console.log(list.head);
+list.append(3);
+list.append(4);
+// list.append(6);
+list.addAtIndex(4, 5);
+console.log(list.reverse());
+console.log(list.convertToArray());
+// console.log(list.reverse());
+
+// 1 2 4 5
