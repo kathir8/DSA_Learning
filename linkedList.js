@@ -119,6 +119,52 @@ class LinkedList {
         return slow;
     }
 
+    hasCycle(bruteForce) {
+        if (bruteForce) { // hash table
+            let current = this.head;
+            const uniqNode = new Set();
+            while (current) {
+                if (uniqNode.has(current)) {
+                    return true
+                } else {
+                    uniqNode.add(current);
+                    current = current.next;
+                }
+            }
+            return false;
+        } else { // Floyd's algorithm
+            let slow = this.head;
+            let fast = this.head;
+
+            while (fast.next) {
+                fast = fast.next.next;
+                slow = slow.next;
+                if (slow === fast) return true;
+            }
+            return false;
+        }
+    }
+
+    createCycle(index) {
+        if (index < 0 || index >= this.size) {
+            throw new Error("Index is not valid");
+        }
+        let target = this.head;
+        for (let i = 0; i < index.length; i++) {
+            target = target.next;
+        }
+
+        let tail = this.head;
+        while (tail.next) {
+            tail = tail.next;
+        }
+        tail.next = target;
+    }
+
+    isPalindrome(){
+
+    }
+
     convertToArray() {
         let current = this.head;
         const output = [];
@@ -136,10 +182,9 @@ list.append(2);
 list.prepend(1);
 list.append(3);
 list.append(4);
-// list.append(6);
+list.append(6);
 list.addAtIndex(4, 5);
-console.log(list.reverse());
-console.log(list.convertToArray());
+// console.log(list.convertToArray());
 // console.log(list.reverse());
 
 // 1 2 4 5
