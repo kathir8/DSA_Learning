@@ -79,6 +79,43 @@ class LinkedList {
         }
     }
 
+    removeGivenVal(val) {
+        const sentinelNode = new Node(null, this.head);
+        let prev = sentinelNode;
+        while (prev && prev.next) {
+            if (prev.next.val === val) {
+                prev.next = prev.next.next;
+                this.size--;
+            } else {
+                prev = prev.next;
+            }
+        }
+        this.head = sentinelNode.next;
+    }
+
+    removeNthFromEnd(ind) {
+        const sentinelNode = new Node(null, this.head);
+        let slow = sentinelNode;
+        let fast = sentinelNode;
+        let nodeInd = 0;
+        while (fast) {
+            if (ind < nodeInd) {
+                slow = slow.next;
+            }
+            fast = fast.next;
+            nodeInd++;
+        }
+
+        // guard against invalid input
+        if (ind >= nodeInd) {
+            console.warn("Invalid index: longer than list length");
+            return;
+        }
+
+        slow.next = slow.next.next;
+        this.head = sentinelNode.next;
+    }
+
     get(index) {
         if (index < 0 || index >= this.size) {
             return -1;
@@ -207,10 +244,10 @@ const list = new LinkedList();
 list.append(1);
 list.append(2);
 // list.append(3);
-// list.append(3);
-// list.append(2);
-// list.append(1);
-console.log(list.isPalindrome());
-// console.log(list.convertToArray());
+// list.append(4);
+// list.append(5);
+// list.append(7);
+list.removeNthFromEnd(5);
+console.log(list.convertToArray());
 
 // 1 2 4 5
