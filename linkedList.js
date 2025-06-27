@@ -232,22 +232,61 @@ class LinkedList {
     }
 }
 
+const input = [
+ [ [1,2,3,4,5] , 2],
+ [ [0, 1, 2] , 4],
+];
+const inpIndex = -1;
+input.forEach((x,i)=>{
+    if(inpIndex === -1 || i === inpIndex){
+        let list1 = x[0];
+        if(Array.isArray(x[0])){
+            list1 = new LinkedList();
+            x[0].forEach(y=> list1.append(y));
+        }
+        let list2 = x[1];
+        if(Array.isArray(x[1])){
+            list2 = new LinkedList();
+            x[1].forEach(y=> list2.append(y));
+        }
+        executeMethod(list1.head || list1, list2?.head || list2);
+    }
+});
 
-const list = new LinkedList();
-// list.append(2);
-// list.prepend(1);
-// list.append(3);
-// list.append(4);
-// list.append(6);
-// list.addAtIndex(4, 5);
 
-list.append(1);
-list.append(2);
-// list.append(3);
-// list.append(4);
-// list.append(5);
-// list.append(7);
-list.removeNthFromEnd(5);
-console.log(list.convertToArray());
+function executeMethod(l1, k){
 
-// 1 2 4 5
+    let current = l1;
+    let nodeSize = 0;
+    while (current) {
+        current = current.next;
+        nodeSize++;
+    }
+    const target = k%nodeSize;
+    let slow = l1;
+    let fast = l1;
+    let start = l1;
+    let i = 0;
+
+    while (fast && fast.next) {
+        if(i >= target){
+            slow = slow.next;
+        }
+        fast = fast.next;
+        i++;
+    }
+    fast.next = start;
+    l1 = slow.next;
+    slow.next = null;
+    convertNodeToArray(l1);
+    
+    function convertNodeToArray(node){
+        const output = [];
+        while (node) {
+            output.push(node.val);
+            node = node.next;
+        }
+        console.log(output);
+        
+    }
+}
