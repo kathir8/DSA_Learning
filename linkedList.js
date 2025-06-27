@@ -233,60 +233,50 @@ class LinkedList {
 }
 
 const input = [
- [ [1,2,3,4,5] , 2],
- [ [0, 1, 2] , 4],
+    [[1, 2, 3, 4]],
+    [[2]],
+    [[1]],
+    [[1, 2, 3]],
 ];
-const inpIndex = -1;
-input.forEach((x,i)=>{
-    if(inpIndex === -1 || i === inpIndex){
+const inpIndex = 0;
+
+input.forEach((x, i) => {
+    if (inpIndex === -1 || i === inpIndex) {
         let list1 = x[0];
-        if(Array.isArray(x[0])){
+        if (Array.isArray(x[0])) {
             list1 = new LinkedList();
-            x[0].forEach(y=> list1.append(y));
+            x[0].forEach(y => list1.append(y));
         }
         let list2 = x[1];
-        if(Array.isArray(x[1])){
+        if (Array.isArray(x[1])) {
             list2 = new LinkedList();
-            x[1].forEach(y=> list2.append(y));
+            x[1].forEach(y => list2.append(y));
         }
         executeMethod(list1.head || list1, list2?.head || list2);
     }
 });
 
 
-function executeMethod(l1, k){
-
-    let current = l1;
-    let nodeSize = 0;
-    while (current) {
-        current = current.next;
-        nodeSize++;
+function executeMethod(l1, k) {
+    let output = l1;
+    let t1 = l1;
+    let t2 = l1.next;
+    while(t2 && t2.next){
+        let temp = t2.next;
+        t2.next = t1;
+        t1.next = temp;
+        t1 = temp;
+        t2 = temp.next;
     }
-    const target = k%nodeSize;
-    let slow = l1;
-    let fast = l1;
-    let start = l1;
-    let i = 0;
-
-    while (fast && fast.next) {
-        if(i >= target){
-            slow = slow.next;
-        }
-        fast = fast.next;
-        i++;
-    }
-    fast.next = start;
-    l1 = slow.next;
-    slow.next = null;
     convertNodeToArray(l1);
-    
-    function convertNodeToArray(node){
-        const output = [];
-        while (node) {
-            output.push(node.val);
-            node = node.next;
-        }
-        console.log(output);
-        
+
+}
+function convertNodeToArray(node) {
+    const output = [];
+    while (node) {
+        output.push(node.val);
+        node = node.next;
     }
+    console.log(output);
+
 }
