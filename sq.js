@@ -1,45 +1,37 @@
 const testCase = [
-    [ 's' ],
-    ['()[]{}'],
-    ['(]'],
-    ['([])']
+    [[4, 1, 2], [1, 3, 4, 2]],
+    [[2, 4], [1, 2, 3, 4]],
+    [[3, 4, 2, 6], [1, 5, 0, 3, 4, 9, 2, 6, 8]],
 ];
-const testInd = 0;
+const testInd = -1;
 testCase.forEach((e, i) => {
     if (testInd === -1 || testInd === i) console.log(method(e));
 });
 
 
-function method([s]) {
-    const stack = [];
-   
-    const push = function (val) {
-        if (!stack.length) {
-            stack.push([val, val]);
-        } else {
-            const lastMinVal = stack.at(-1)[1];
-            const minVal = lastMinVal < val ? lastMinVal : val;
-            stack.push([val, minVal]);
+function method([nums1, nums2]) {
+    // const obj = {};
+    // for (let i = 0; i < nums2.length; i++) {
+    //     obj[nums2[i]] = -1;
+    //     for (let j = i + 1; j < nums2.length; j++) {
+    //         if (nums2[i] < nums2[j]) {
+    //             obj[nums2[i]] = nums2[j];
+    //             break;
+    //         }
+    //     }
+    // }
+    const output = [];
+
+    for (let i = 0; i < nums1.length; i++) {
+        const ind = nums2.indexOf(nums1[i]);
+        let val = -1;
+        for (let j = ind + 1; j < nums2.length; j++) {
+            if (nums1[i] < nums2[j]) {
+                val = nums2[j];
+                break;
+            }
         }
-    };
-
-    const pop = function () {
-        stack.pop();
-    };
-    const top = function () {
-        return stack.at(-1)[0];
-    };
-
-    const getMin = function () {
-        return stack.at(-1)[1];
-    };
-
-
-    push(-2);
-    push(0);
-    push(-3);
-    console.log(getMin());
-    pop();
-    console.log(top());    
-    console.log(getMin());
+        output.push(val);
+    }
+    return output;
 }
