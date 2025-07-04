@@ -1,37 +1,52 @@
 const testCase = [
-    [[4, 1, 2], [1, 3, 4, 2]],
-    [[2, 4], [1, 2, 3, 4]],
-    [[3, 4, 2, 6], [1, 5, 0, 3, 4, 9, 2, 6, 8]],
+    [[73, 74, 75, 71, 69, 72, 76, 73]],
+    [[30, 40, 50, 60]],
+    [[30, 60, 90]],
 ];
-const testInd = -1;
+// 1,2,24,3,15,13,14,26,28
+const testInd = 0;
 testCase.forEach((e, i) => {
     if (testInd === -1 || testInd === i) console.log(method(e));
 });
 
 
-function method([nums1, nums2]) {
-    // const obj = {};
-    // for (let i = 0; i < nums2.length; i++) {
-    //     obj[nums2[i]] = -1;
-    //     for (let j = i + 1; j < nums2.length; j++) {
-    //         if (nums2[i] < nums2[j]) {
-    //             obj[nums2[i]] = nums2[j];
-    //             break;
-    //         }
-    //     }
-    // }
-    const output = [];
+function method([temperatures]) {
 
-    for (let i = 0; i < nums1.length; i++) {
-        const ind = nums2.indexOf(nums1[i]);
-        let val = -1;
-        for (let j = ind + 1; j < nums2.length; j++) {
-            if (nums1[i] < nums2[j]) {
-                val = nums2[j];
-                break;
+    const stack = [];
+    const output = [];
+    let lasInd = 0;
+    for (let i = temperatures.length - 1; i >= 0; i--) {
+        if (!stack.length) {
+            stack.push(temperatures[i]);
+            output.unshift(0);
+            lasInd++;
+        } else if (stack.at(-1) > temperatures[i]) {
+            stack.push(temperatures[i]);
+            output.unshift(1);
+            lasInd++;
+        } else {
+            let j = 1;
+            while (stack.length) {
+                if (stack.at(-1) < temperatures[i]) {
+                    stack.pop();
+                } else {
+                    lasInd++;
+                    stack.push(temperatures[i]);
+                    output.unshift(j);
+                    break;
+                }
+                j++;
+            }
+
+            if (!stack.length) {
+                lasInd++;
+                stack.push(temperatures[i]);
+                output.unshift(0);
             }
         }
-        output.push(val);
+
     }
+
+
     return output;
 }
